@@ -1,8 +1,8 @@
-# Ambientes Python
+# Ambiente virtual
 .venv/
 venv/
 
-# Variáveis de ambiente
+# Variáveis de ambiente / segredos
 .env
 
 # Python
@@ -10,12 +10,14 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Dados gerados pela pipeline
-data/downloads/
+# Logs
+logs/*.log
+
+# Banco local
 data/database/*.db
 
-# Logs
-logs/
-
-# Temporários
+# Arquivos temporários
 *.tmp
+
+# VS Code
+.vscode/
