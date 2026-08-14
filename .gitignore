@@ -1,0 +1,21 @@
+# Ambientes Python
+.venv/
+venv/
+
+# Variáveis de ambiente
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Dados gerados pela pipeline
+data/downloads/
+data/database/*.db
+
+# Logs
+logs/
+
+# Temporários
+*.tmp
