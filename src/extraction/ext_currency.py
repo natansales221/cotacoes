@@ -12,7 +12,7 @@ class Extraction():
         return "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)"
 
     # Extracting wished currency since 2000's
-    def main(self, moedas, arquivo_log):
+    def main(self, arquivo_log):
         logger = logging.getLogger(__name__)
         
         logger.info("=" * 60)
@@ -21,8 +21,8 @@ class Extraction():
         logger.info("=" * 60)
         
         ano_atual = datetime.now().year
-
-        for moeda in moedas:
+        lista_moedas = ["AUD", "CAD", "CHF", "DKK", "EUR", "GBP", "JPY", "NOK", "SEK", "USD"]
+        for moeda in lista_moedas:
             for ano in range(2000, ano_atual + 1):
                 logger.info("=" * 60)
                 logger.info(f"Iniciando extração: moeda={moeda}, ano={ano}")
@@ -61,7 +61,7 @@ class Extraction():
     
 if __name__ == "__main__":
     service=Extraction()
-    lista_moedas = ["AUD", "CAD", "CHF", "DKK", "EUR", "GBP", "JPY", "NOK", "SEK", "USD"]
+
     arquivo = logs()
-    service.main(moedas=lista_moedas, arquivo_log=arquivo)
+    service.main(arquivo_log=arquivo)
     

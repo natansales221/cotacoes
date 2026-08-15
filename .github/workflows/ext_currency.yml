@@ -1,0 +1,50 @@
+name: Extract Currency
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  extract-currency:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Extract PTAX currencies
+        run: |
+          python -m src.extraction.ext_currency
+
+      - name: Upload PTAX files
+        uses: actions/upload-artifact@v7
+        with:
+          name: ptax-currency-${{ github.run_id }}
+          path: data/downloads/ptax/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload extraction logs
+        uses: actions/upload-artifact@v7
+        with:
+          name: extraction-logs-${{ github.run_id }}
+          path: logs/
+          if-no-files-found: warn
+          retention-days: 7
+          
