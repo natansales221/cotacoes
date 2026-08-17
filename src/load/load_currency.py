@@ -20,7 +20,7 @@ class LoadCurrency():
         }
 
 
-    def gerar_hash(row):
+    def gerar_hash(self, row):
         
         conteudo = (
             f"{row['moeda']}|"
