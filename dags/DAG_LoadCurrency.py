@@ -16,16 +16,17 @@ from src.load.load_currency import LoadCurrency
     catchup=False,
     tags=["dev", "currency"],
 )
-def currency_pipeline():
 
+def load_currency_dag():
+    
     @task
-    def extract_currency():
+    def load_currency():
 
         service = LoadCurrency()
-
         service.main()
 
-    extract_currency()
+    load_currency()
 
 
-currency_pipeline()
+
+load_currency_dag()

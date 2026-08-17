@@ -8,9 +8,18 @@ from pathlib import Path
 class LoadCurrency():
 
     def diretorios():
-        return {"database":"data/database",
-                "sqlite":"data/database/database.db",
-                "path_ptax":"data\downloads\ptax"}
+    
+        base_data = Path(
+            os.getenv("DATA_DIR", "data")
+        )
+
+        return {
+            "database": base_data / "database",
+            "sqlite": base_data / "database" / "database.db",
+            "path_ptax": base_data / "downloads" / "ptax",
+        }
+
+
     def gerar_hash(row):
         
         conteudo = (
