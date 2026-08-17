@@ -16,7 +16,7 @@ class Extraction():
         logger = logging.getLogger(__name__)
         
         logger.info("=" * 60)
-        logger.info("INÍCIO DA EXTRAÇÃO PTAX_no git")
+        logger.info("INÍCIO DA EXTRAÇÃO PTAX")
         logger.info(f"Arquivo de log: {arquivo_log}")
         logger.info("=" * 60)
         

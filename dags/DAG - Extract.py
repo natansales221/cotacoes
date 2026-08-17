@@ -6,7 +6,7 @@ from src.extraction.ext_currency import Extraction
 from src.utils.utilidades import logs
 
 @dag(
-    dag_id="currency_pipeline_dev",
+    dag_id="DAG - Extract",
     schedule=None,
     start_date=pendulum.datetime(
         2026,
