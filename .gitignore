@@ -21,3 +21,7 @@ data/database/*.db
 
 # VS Code
 .vscode/
+
+# Airflow / pipeline runtime
+logs/
+data/downloads/
