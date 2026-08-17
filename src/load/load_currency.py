@@ -38,6 +38,7 @@ class LoadCurrency():
         Path(LoadCurrency.diretorios()['database']).mkdir(parents=True, exist_ok=True)
 
         conn = sqlite3.connect(LoadCurrency.diretorios()['sqlite'])
+        print(f"caminhos: SQLITE{LoadCurrency.diretorios()['sqlite']} | database: {LoadCurrency.diretorios()['sqlite']} | ptax: {LoadCurrency.diretorios()['sqlite']}")
         cursor = conn.cursor()
 
         cursor.execute("""
