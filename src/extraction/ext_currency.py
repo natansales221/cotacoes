@@ -5,7 +5,7 @@ import requests
 import logging
 from src.utils.utilidades import logs
 
-class Extraction():
+class ExtractCurrency():
     
     # URL to search currency
     def url():
@@ -35,7 +35,7 @@ class Extraction():
                     "$select": "cotacaoCompra,cotacaoVenda,dataHoraCotacao,tipoBoletim"
                 }
 
-                response = requests.get(Extraction.url(), params=PARAMS, timeout=30)
+                response = requests.get(ExtractCurrency.url(), params=PARAMS, timeout=30)
                 response.raise_for_status()
                 logger.info(f"Consulta feita com sucesso!")
                 dados = response.json()["value"]
@@ -60,7 +60,7 @@ class Extraction():
         logger.info("=" * 60)
     
 if __name__ == "__main__":
-    service=Extraction()
+    service=ExtractCurrency()
 
     arquivo = logs()
     service.main(arquivo_log=arquivo)
