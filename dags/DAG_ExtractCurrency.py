@@ -2,7 +2,7 @@ import pendulum
 
 from airflow.sdk import dag, task
 
-from src.extraction.ext_currency import Extraction
+from src.extraction.ext_currency import ExtractCurrency
 from src.utils.utilidades import logs
 
 @dag(
@@ -24,7 +24,7 @@ def currency_pipeline():
 
         arquivo_log = logs()
 
-        service = Extraction()
+        service = ExtractCurrency()
 
         service.main(arquivo_log=arquivo_log)
 
