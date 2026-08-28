@@ -6,22 +6,22 @@ from src.extraction.ext_selic import ExtractSelic
 
 
 @dag(
-    dag_id="DAG_ExtractCurrency",
+    dag_id="DAG_ExtractSelic",
     schedule=None,
     start_date=pendulum.datetime( 2026,1,1,tz="America/Sao_Paulo"),
     catchup=False,
-    tags=["dev", "currency"],
+    tags=["dev", "selic"],
 )
-def currency_pipeline():
+def selic_pipeline():
 
     @task
-    def extract_currency():
+    def extract_selic():
 
         service = ExtractSelic()
 
         service.main()
 
-    extract_currency()
+    extract_selic()
 
 
-currency_pipeline()
+selic_pipeline()
