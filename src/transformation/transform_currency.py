@@ -8,9 +8,9 @@ class TransformCurrency:
 
     def database_path(self):
 
-        base_data = Path(os.getenv("DATA_DIR", "data"))
+        base_data = Path(f"data/database/database.db")
 
-        return (base_data / "database" / "database.db")
+        return base_data
 
     def sql_path(self):
 
