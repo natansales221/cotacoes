@@ -7,7 +7,7 @@ from src.utils.utilidades import logs
 
 @dag(
     dag_id="DAG_ExtractCurrency",
-    schedule=None,
+    schedule="0 6 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
         1,

@@ -6,7 +6,7 @@ from src.transformation.transform_currency import TransformCurrency
 
 @dag(
     dag_id="DAG_TransformCurrency",
-    schedule=None,
+    schedule="0 8 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
         1,

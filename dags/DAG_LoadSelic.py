@@ -6,7 +6,7 @@ from src.load.load_selic import LoadSelic
 
 @dag(
     dag_id="DAG_LoadSelic",
-    schedule=None,
+    schedule="10 7 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
         1,
