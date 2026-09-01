@@ -13,7 +13,7 @@ class ExtractSelic():
     def url(self):
         return {
             "api_bcb": "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados",
-            "diretorio_download": r'D:\Desktop\Projetos\cotacoes-moedas\data\downloads\selic'
+            "diretorio_download": r'D:\Desktop\Projetos\cotacoes-dev\data\downloads\selic'
                 }
         
     def periodos(self):
