@@ -6,7 +6,7 @@ from src.load.load_currency import LoadCurrency
 
 @dag(
     dag_id="DAG_LoadCurrency",
-    schedule=None,
+    schedule="0 7 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
         1,
