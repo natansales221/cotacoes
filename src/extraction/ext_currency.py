@@ -11,6 +11,10 @@ class ExtractCurrency():
     def url():
         return "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)"
 
+    # creating path to download the file
+    def path(self, moeda):
+        return Path(f"data/downloads/ptax/{moeda}")
+    
     # Extracting wished currency since 2000's
     def main(self, arquivo_log):
         logger = logging.getLogger(__name__)
@@ -44,7 +48,7 @@ class ExtractCurrency():
                 
                 logger.info(f"Dataframe criado com sucesso")
                 
-                destino = Path(f"data/downloads/ptax/{moeda}")
+                destino = self.path(moeda)
                 destino.mkdir(parents=True, exist_ok=True)
                 logger.info(f"Pasta criada com sucesso")
                 arquivo = destino / f"ptax_{moeda}_{ano}.csv"

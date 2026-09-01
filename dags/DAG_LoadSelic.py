@@ -2,10 +2,10 @@ import pendulum
 
 from airflow.sdk import dag, task
 
-from src.load.load_currency import LoadCurrency
+from src.load.load_selic import LoadSelic
 
 @dag(
-    dag_id="DAG_LoadCurrency",
+    dag_id="DAG_LoadSelic",
     schedule=None,
     start_date=pendulum.datetime(
         2026,
@@ -17,16 +17,16 @@ from src.load.load_currency import LoadCurrency
     tags=["dev", "load", "currency"],
 )
 
-def load_currency_dag():
+def load_selic_dag():
     
     @task
-    def load_currency():
+    def load_selic():
 
-        service = LoadCurrency()
+        service = LoadSelic()
         service.main()
 
-    load_currency()
+    load_selic()
 
 
 
-load_currency_dag()
+load_selic_dag()
