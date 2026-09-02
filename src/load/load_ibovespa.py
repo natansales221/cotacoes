@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-class LoadSelic():
+class LoadIbovespa():
     
     def database_path(self):
     
@@ -170,5 +170,5 @@ class LoadSelic():
 
         
 if __name__ == "__main__":
-    service = LoadSelic()
+    service = LoadIbovespa()
     service.main()
