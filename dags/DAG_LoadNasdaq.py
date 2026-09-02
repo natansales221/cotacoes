@@ -14,7 +14,7 @@ from src.load.load_nasdaq import LoadNasdaq
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "Nasdaq", "load"],
+    tags=["dev", "nasdaq", "load"],
 )
 
 def load_nasdaq_dag():
