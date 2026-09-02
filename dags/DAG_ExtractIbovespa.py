@@ -6,7 +6,7 @@ from src.extraction.ext_ibovespa import ExtractIbovespa
 
 
 @dag(
-    dag_id="DAG_ExtractCurrency",
+    dag_id="DAG_ExtractIbovespa",
     schedule="20 6 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
