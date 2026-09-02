@@ -15,7 +15,7 @@ from src.extraction.ext_ibovespa import ExtractIbovespa
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "extract", "ibovespa"],
+    tags=["dev", "ibovespa", "extract"],
 )
 def ibovespa_pipeline():
 

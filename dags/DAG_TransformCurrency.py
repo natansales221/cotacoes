@@ -14,7 +14,7 @@ from src.transformation.transform_currency import TransformCurrency
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "transform", "currency"],
+    tags=["dev", "currency", "transform"],
 )
 
 def transform_currency_dag():

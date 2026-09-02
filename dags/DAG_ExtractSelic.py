@@ -10,7 +10,7 @@ from src.extraction.ext_selic import ExtractSelic
     schedule="10 6 * * 1-5", 
     start_date=pendulum.datetime( 2026,1,1,tz="America/Sao_Paulo"),
     catchup=False,
-    tags=["dev", "extract", "selic"],
+    tags=["dev", "selic", "extract"],
 )
 def selic_pipeline():
 

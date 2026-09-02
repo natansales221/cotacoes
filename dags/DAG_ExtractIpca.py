@@ -14,7 +14,7 @@ from src.extraction.ext_ipca import ExtractIpca
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "extract", "ipca"],
+    tags=["dev", "ipca", "extract"],
 )
 def ipca_pipeline():
 

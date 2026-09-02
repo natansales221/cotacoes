@@ -15,7 +15,7 @@ from src.utils.utilidades import logs
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "extract", "currency"],
+    tags=["dev", "currency", "extract"],
 )
 def currency_pipeline():
 

@@ -14,7 +14,7 @@ from src.load.load_currency import LoadCurrency
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "load", "currency"],
+    tags=["dev", "currency", "load"],
 )
 
 def load_currency_dag():

@@ -14,7 +14,7 @@ from src.load.load_selic import LoadSelic
         tz="America/Sao_Paulo"
     ),
     catchup=False,
-    tags=["dev", "load", "currency"],
+    tags=["dev", "selic", "load"],
 )
 
 def load_selic_dag():
