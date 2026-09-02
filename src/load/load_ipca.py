@@ -39,7 +39,7 @@ class LoadIpca():
         
     def gerar_hash(self, row):
         
-        conteudo = (f"{row['tipo']}|{row['data']}|{row['dt_carga']}")
+        conteudo = (f"{row['tipo']}|{row['data']}|{row['valor_percentual']}")
         
         return hashlib.sha256(conteudo.encode("utf-8")).hexdigest()
     
