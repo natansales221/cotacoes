@@ -2,7 +2,6 @@ import sqlite3
 import os
 import hashlib
 import pandas as pd
-  
 from datetime import datetime
 from pathlib import Path
 
@@ -15,57 +14,63 @@ class LoadSelic():
 
     def downloads_path(self):
 
-        return Path("data/downloads/selic")
+        return Path("data/downloads/yfinance/ibovespa")
     
     def criar_tabela(self, cursor):
     
         cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS selic
-            (
-                id              INTEGER PRIMARY KEY AUTOINCREMENT,
-                moeda           TEXT NOT NULL,
-                dt_cotacao      TEXT NOT NULL,
-                vl_cotacao      REAL NOT NULL,
-                dt_carga        TEXT NOT NULL,
-                record_hash     TEXT NOT NULL UNIQUE
-            )
+            CREATE TABLE IF NOT EXISTS ibovespa
+                (
+                    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo                  TEXT NOT NULL,
+                    ticker                TEXT NOT NULL,
+                    data                  TEXT NOT NULL,
+                    ano                   INTEGER NOT NULL,
+                    abertura              REAL,
+                    maxima                REAL,
+                    minima                REAL,
+                    fechamento            REAL,
+                    fechamento_ajustado   REAL,
+                    volume                INTEGER,
+                    fonte                 TEXT,
+                    dt_carga              TEXT NOT NULL,
+                    record_hash           TEXT NOT NULL UNIQUE
+                );
             """
         )
         
     def gerar_hash(self, row):
     
-        conteudo = (f"{row['dt_cotacao']}|{row['vl_cotacao']}")
+        conteudo = (f"{row['tipo']}|{row['ticker']}|{row['fechamento']}")
 
         return hashlib.sha256(conteudo.encode("utf-8")).hexdigest()
     
     def main(self):
     
-         
-
         print("=" * 60)
-        print("INÍCIO DA CARGA DA SELIC")
+        print("INÍCIO DA CARGA IBOVESPA")
         print("=" * 60)
 
         database = self.database_path()
-        pasta_selic = self.downloads_path()
+        pasta_ibovespa = self.downloads_path()
 
         print(f"Database: {database}")
-        print(f"Diretório dos arquivos: {pasta_selic}")
+        print(f"Diretório dos arquivos: {pasta_ibovespa}")
         
         if not database.parent.exists():
     
             raise FileNotFoundError(f"Diretório do banco não encontrado: {database.parent}")
 
-        if not pasta_selic.exists():
+        if not pasta_ibovespa.exists():
 
-            raise FileNotFoundError(f"Diretório da Selic não encontrado: {pasta_selic}")
+            raise FileNotFoundError(f"Diretório ibovespa não encontrado: {pasta_ibovespa}")
 
-        arquivos = sorted(pasta_selic.glob("*.csv"))
+        arquivos = sorted(pasta_ibovespa.glob("*.csv"))
         
         if not arquivos:
     
-            raise FileNotFoundError(f"Nenhum arquivo CSV encontrado em: {pasta_selic}")
+            raise FileNotFoundError(f"Nenhum arquivo CSV encontrado em: {pasta_ibovespa}")
 
         conn = sqlite3.connect(database)
 
@@ -87,33 +92,9 @@ class LoadSelic():
 
                     continue
 
-                colunas_obrigatorias = {
-                    "data",
-                    "valor"
-                }
-
-                colunas_ausentes = (colunas_obrigatorias - set(df.columns))
-
-                if colunas_ausentes:
-
-                    raise ValueError(f"{arquivo_csv.name} possui colunas ausentes: {sorted(colunas_ausentes)}")
-
-                df = df.rename(
-                    columns={
-                        "data": "dt_cotacao",
-                        "valor": "vl_cotacao"
-                    }
-                )
-
-                df["moeda"] = "Selic"
-
-                df["dt_cotacao"] = pd.to_datetime(df["dt_cotacao"], format="%d/%m/%Y", errors="coerce").dt.strftime("%Y-%m-%d")
-
-                df["vl_cotacao"] = pd.to_numeric(df["vl_cotacao"].astype(str).str.replace(",",  ".", regex=False),errors="coerce")
-
                 total_lidos = len(df)
 
-                df = df.dropna(subset=["dt_cotacao", "vl_cotacao"])
+                df = df.dropna(subset=["dt_carga"])
 
                 rejeitados = total_lidos - len(df)
 
@@ -122,13 +103,9 @@ class LoadSelic():
                 df["dt_carga"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                 df_load = df[
-                    [
-                        "moeda",
-                        "dt_cotacao",
-                        "vl_cotacao",
-                        "dt_carga",
-                        "record_hash"
-                    ]].drop_duplicates(
+                    ['tipo', 'ticker', 'data', 'ano', 'abertura', 'maxima', 'minima',
+                    'fechamento', 'fechamento_ajustado', 'volume', 'fonte', 'dt_carga',
+                    'record_hash']].drop_duplicates(
                     subset=["record_hash"])
 
                 registros = list( df_load.itertuples(index=False,name=None))
@@ -137,15 +114,23 @@ class LoadSelic():
 
                 cursor.executemany(
                     """
-                    INSERT OR IGNORE INTO selic
+                    INSERT OR IGNORE INTO ibovespa
                     (
-                        moeda,
-                        dt_cotacao,
-                        vl_cotacao,
+                        tipo,
+                        ticker,
+                        data,
+                        ano,
+                        abertura,
+                        maxima,
+                        minima,
+                        fechamento,
+                        fechamento_ajustado,
+                        volume,
+                        fonte,
                         dt_carga,
                         record_hash
                     )
-                    VALUES (?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     registros
                 )
@@ -166,7 +151,7 @@ class LoadSelic():
                 )
 
             print("=" * 60)
-            print("CARGA DA SELIC FINALIZADA")
+            print("CARGA IBOVESPA FINALIZADA")
             print("=" * 60)
 
         except Exception:

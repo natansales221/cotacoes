@@ -1,6 +1,5 @@
 import os
 import sqlite3
-import logging
 from pathlib import Path
 
 
@@ -22,16 +21,16 @@ class TransformCurrency:
         ]
 
     def main(self):
-        logger = logging.getLogger(__name__)
+         
                 
-        logger.info("=" * 60)
-        logger.info("INÍCIO DA TRANSFORMAÇÃO")
-        logger.info("=" * 60)
+        print("=" * 60)
+        print("INÍCIO DA TRANSFORMAÇÃO")
+        print("=" * 60)
     
         database = self.database_path()
 
         conn = sqlite3.connect(database)
-        logger.info("DATABASE CONNECTED")
+        print("DATABASE CONNECTED")
 
         try:
 
@@ -39,7 +38,7 @@ class TransformCurrency:
 
             for arquivo_sql in self.sql_path():
 
-                logger.info(f"Executando: {arquivo_sql.name}")
+                print(f"Executando: {arquivo_sql.name}")
 
                 with open(arquivo_sql, "r", encoding="utf-8") as arquivo:
 
@@ -47,7 +46,7 @@ class TransformCurrency:
 
                 cursor.executescript(sql)
 
-                logger.info(f"{arquivo_sql.name} executado com sucesso!")
+                print(f"{arquivo_sql.name} executado com sucesso!")
 
             conn.commit()
 

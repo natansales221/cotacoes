@@ -1,6 +1,6 @@
 import requests
 import os
-import logging
+  
 from datetime import datetime
 import pandas as pd
 
@@ -23,29 +23,29 @@ class ExtractSelic():
         ("01/01/2020", "31/12/2026")
     ]
     def main(self):
-        logger = logging.getLogger(__name__)
-        logger.info("Iniciando processo")
+         
+        print("Iniciando processo")
         
         todos_dados = []
 
         for data_inicial, data_final in self.periodos():
 
-            logger.info(f"Consultando: {data_inicial} até {data_final}")
+            print(f"Consultando: {data_inicial} até {data_final}")
 
             parametros = {"formato": "json","dataInicial": data_inicial,"dataFinal": data_final}
 
             resposta = requests.get(self.url()['api_bcb'],params=parametros, headers={"User-Agent": "Mozilla/5.0"})
 
             if resposta.status_code != 200:
-                logger.info(f"Erro na consulta: {resposta.status_code}")
-                logger.info(resposta.text)
+                print(f"Erro na consulta: {resposta.status_code}")
+                print(resposta.text)
                 exit()
 
             dados = resposta.json()
 
             todos_dados.extend(dados)
 
-            logger.info(f"Registros encontrados: {len(dados)}")
+            print(f"Registros encontrados: {len(dados)}")
 
 
         os.makedirs(self.url()['diretorio_download'], exist_ok=True)

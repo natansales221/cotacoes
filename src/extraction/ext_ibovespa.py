@@ -1,7 +1,7 @@
 import os
 from datetime import date, datetime, timedelta
 from pathlib import Path
-import logging
+  
 import pandas as pd
 import yfinance as yf
 
@@ -60,14 +60,14 @@ class ExtractIbovespa:
         return resultado.drop_duplicates(subset=["tipo", "data"]).sort_values("data")
 
     def main(self):
-        logger = logging.getLogger(__name__)
+         
         arquivo_saida = self.output_path()
         arquivo_saida.parent.mkdir(parents=True, exist_ok=True)
 
         dados = self.extract()
         dados.to_csv(arquivo_saida, index=False, encoding="utf-8", float_format="%.6f")
 
-        logger.info(f"{len(dados)} registros de {self.TIPO} salvos em: {arquivo_saida}")
+        print(f"{len(dados)} registros de {self.TIPO} salvos em: {arquivo_saida}")
 
 
 if __name__ == "__main__":

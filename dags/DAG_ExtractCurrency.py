@@ -22,11 +22,8 @@ def currency_pipeline():
     @task
     def extract_currency():
 
-        arquivo_log = logs()
-
         service = ExtractCurrency()
-
-        service.main(arquivo_log=arquivo_log)
+        service.main()
 
     extract_currency()
 

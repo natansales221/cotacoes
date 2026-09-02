@@ -2,7 +2,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 import requests
-import logging
+  
 from src.utils.utilidades import logs
 
 class ExtractCurrency():
@@ -16,20 +16,19 @@ class ExtractCurrency():
         return Path(f"data/downloads/ptax/{moeda}")
     
     # Extracting wished currency since 2000's
-    def main(self, arquivo_log):
-        logger = logging.getLogger(__name__)
+    def main(self):
+         
         
-        logger.info("=" * 60)
-        logger.info("INÍCIO DA EXTRAÇÃO PTAX")
-        logger.info(f"Arquivo de log: {arquivo_log}")
-        logger.info("=" * 60)
+        print("=" * 60)
+        print("INÍCIO DA EXTRAÇÃO PTAX")
+        print("=" * 60)
         
         ano_atual = datetime.now().year
         lista_moedas = ["AUD", "CAD", "CHF", "DKK", "EUR", "GBP", "JPY", "NOK", "SEK", "USD"]
         for moeda in lista_moedas:
             for ano in range(2000, ano_atual + 1):
-                logger.info("=" * 60)
-                logger.info(f"Iniciando extração: moeda={moeda}, ano={ano}")
+                print("=" * 60)
+                print(f"Iniciando extração: moeda={moeda}, ano={ano}")
                 PARAMS = {
                     "@moeda": f"'{moeda}'",
                     "@dataInicial": f"'01-01-{ano}'",
@@ -41,31 +40,29 @@ class ExtractCurrency():
 
                 response = requests.get(ExtractCurrency.url(), params=PARAMS, timeout=30)
                 response.raise_for_status()
-                logger.info(f"Consulta feita com sucesso!")
+                print(f"Consulta feita com sucesso!")
                 dados = response.json()["value"]
 
                 df = pd.DataFrame(dados)
                 
-                logger.info(f"Dataframe criado com sucesso")
+                print(f"Dataframe criado com sucesso")
                 
                 destino = self.path(moeda)
                 destino.mkdir(parents=True, exist_ok=True)
-                logger.info(f"Pasta criada com sucesso")
+                print(f"Pasta criada com sucesso")
                 arquivo = destino / f"ptax_{moeda}_{ano}.csv"
 
                 df.to_csv(arquivo, index=False, encoding="utf-8")
                 
-                logger.info("Extração concluída")
-                logger.info(f"Foram extraídos {len(df)} registros")
-                logger.info("=" * 60)
+                print("Extração concluída")
+                print(f"Foram extraídos {len(df)} registros")
+                print("=" * 60)
 
-        logger.info("=" * 60)
-        logger.info("FIM DA EXTRAÇÃO PTAX")
-        logger.info("=" * 60)
+        print("=" * 60)
+        print("FIM DA EXTRAÇÃO PTAX")
+        print("=" * 60)
     
 if __name__ == "__main__":
     service=ExtractCurrency()
-
-    arquivo = logs()
-    service.main(arquivo_log=arquivo)
+    service.main()
     
