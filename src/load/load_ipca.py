@@ -2,11 +2,12 @@ import sqlite3
 import os
 import hashlib
 import pandas as pd
+  
 from datetime import datetime
 from pathlib import Path
 
 
-class LoadIbovespa():
+class LoadIpca():
     
     def database_path(self):
     
@@ -14,63 +15,58 @@ class LoadIbovespa():
 
     def downloads_path(self):
 
-        return Path("data/downloads/yfinance/ibovespa")
+        return Path("data/downloads/bcb/ipca")
     
     def criar_tabela(self, cursor):
     
         cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS ibovespa
+            CREATE TABLE IF NOT EXISTS ipca
                 (
-                    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tipo                  TEXT NOT NULL,
-                    ticker                TEXT NOT NULL,
-                    data                  TEXT NOT NULL,
-                    ano                   INTEGER NOT NULL,
-                    abertura              REAL,
-                    maxima                REAL,
-                    minima                REAL,
-                    fechamento            REAL,
-                    fechamento_ajustado   REAL,
-                    volume                INTEGER,
-                    fonte                 TEXT,
-                    dt_carga              TEXT NOT NULL,
-                    record_hash           TEXT NOT NULL UNIQUE
+                    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo                TEXT NOT NULL,
+                    codigo_serie        INTEGER NOT NULL,
+                    data                TEXT NOT NULL,
+                    ano                 INTEGER NOT NULL,
+                    valor_percentual    REAL NOT NULL,
+                    periodicidade       TEXT NOT NULL,
+                    fonte               TEXT,
+                    dt_carga            TEXT NOT NULL,
+                    record_hash         TEXT NOT NULL UNIQUE
                 );
             """
         )
         
     def gerar_hash(self, row):
-    
-        conteudo = (f"{row['tipo']}|{row['ticker']}|{row['fechamento']}")
-
+        
+        conteudo = (f"{row['tipo']}|{row['data']}|{row['dt_carga']}")
+        
         return hashlib.sha256(conteudo.encode("utf-8")).hexdigest()
     
     def main(self):
-    
         print("=" * 60)
-        print("INÍCIO DA CARGA IBOVESPA")
+        print("INÍCIO DA CARGA DA IPCA")
         print("=" * 60)
 
         database = self.database_path()
-        pasta_ibovespa = self.downloads_path()
+        pasta_ipca = self.downloads_path()
 
         print(f"Database: {database}")
-        print(f"Diretório dos arquivos: {pasta_ibovespa}")
+        print(f"Diretório dos arquivos: {pasta_ipca}")
         
         if not database.parent.exists():
     
             raise FileNotFoundError(f"Diretório do banco não encontrado: {database.parent}")
 
-        if not pasta_ibovespa.exists():
+        if not pasta_ipca.exists():
 
-            raise FileNotFoundError(f"Diretório ibovespa não encontrado: {pasta_ibovespa}")
+            raise FileNotFoundError(f"Diretório da IPCA não encontrado: {pasta_ipca}")
 
-        arquivos = sorted(pasta_ibovespa.glob("*.csv"))
+        arquivos = sorted(pasta_ipca.glob("*.csv"))
         
         if not arquivos:
     
-            raise FileNotFoundError(f"Nenhum arquivo CSV encontrado em: {pasta_ibovespa}")
+            raise FileNotFoundError(f"Nenhum arquivo CSV encontrado em: {pasta_ipca}")
 
         conn = sqlite3.connect(database)
 
@@ -94,7 +90,7 @@ class LoadIbovespa():
 
                 total_lidos = len(df)
 
-                df = df.dropna(subset=["dt_carga"])
+                df = df.dropna(subset=["ano"])
 
                 rejeitados = total_lidos - len(df)
 
@@ -102,11 +98,9 @@ class LoadIbovespa():
 
                 df["dt_carga"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-                df_load = df[
-                    ['tipo', 'ticker', 'data', 'ano', 'abertura', 'maxima', 'minima',
-                    'fechamento', 'fechamento_ajustado', 'volume', 'fonte', 'dt_carga',
-                    'record_hash']].drop_duplicates(
-                    subset=["record_hash"])
+                df_load = df[['tipo', 'codigo_serie', 'data', 'ano', 'valor_percentual',
+                            'periodicidade', 'fonte', 'dt_carga', 'record_hash']].drop_duplicates(
+                            subset=["record_hash"])
 
                 registros = list( df_load.itertuples(index=False,name=None))
 
@@ -114,23 +108,19 @@ class LoadIbovespa():
 
                 cursor.executemany(
                     """
-                    INSERT OR IGNORE INTO ibovespa
+                    INSERT OR IGNORE INTO ipca
                     (
                         tipo,
-                        ticker,
+                        codigo_serie,
                         data,
                         ano,
-                        abertura,
-                        maxima,
-                        minima,
-                        fechamento,
-                        fechamento_ajustado,
-                        volume,
+                        valor_percentual,
+                        periodicidade,
                         fonte,
                         dt_carga,
                         record_hash
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     registros
                 )
@@ -151,14 +141,14 @@ class LoadIbovespa():
                 )
 
             print("=" * 60)
-            print("CARGA IBOVESPA FINALIZADA")
+            print("CARGA DA IPCA FINALIZADA")
             print("=" * 60)
 
         except Exception:
 
             conn.rollback()
 
-            print("Erro durante a carga da Ibovespa")
+            print("Erro durante a carga da IPCA")
 
             raise
 
@@ -170,5 +160,5 @@ class LoadIbovespa():
 
         
 if __name__ == "__main__":
-    service = LoadIbovespa()
+    service = LoadIpca()
     service.main()

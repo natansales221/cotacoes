@@ -6,7 +6,7 @@ from src.load.load_ibovespa import LoadIbovespa
 
 @dag(
     dag_id="DAG_LoadIbovespa",
-    schedule="10 7 * * 1-5", 
+    schedule="20 7 * * 1-5", 
     start_date=pendulum.datetime(
         2026,
         1,
