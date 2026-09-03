@@ -55,12 +55,7 @@ class TransformIndexer:
                 print(f"Executando transformação: {nome_transformacao}")
                 print(f"Arquivo SQL: {arquivo_sql.name}")
 
-                with open(
-                    arquivo_sql,
-                    "r",
-                    encoding="utf-8"
-                ) as arquivo:
-
+                with open(arquivo_sql,"r",encoding="utf-8") as arquivo:
                     sql = arquivo.read()
 
                 cursor.executescript(sql)
